@@ -13,7 +13,7 @@ const excelFile = 'patient_data.xlsx';
 const ESP32_IP = 'http://192.168.1.50'; // ⬅️ Replace with your ESP32 IP
 
 app.use(bodyParser.json());
-app.use(express.static(path.join(__dirname, 'public')));
+app.use(express.static(__dirname));
 
 // Temporary storage for sensor readings
 let latestSensorData = {
@@ -95,6 +95,11 @@ app.post('/submit', async (req, res) => {
 
   res.status(200).json({ message: 'Patient data saved successfully' });
 });
+
+app.get('/', (req, res) => {
+  res.sendFile(path.join(__dirname, 'index.html'));
+});
+
 
 // 🟢 Start server
 app.listen(PORT, () => {
