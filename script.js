@@ -1,17 +1,15 @@
-// Fetch sensor data and fill form
-function loadSensorData() {
-  fetch('/get-latest-sensor')
-    .then(res => res.json())
-    .then(data => {
-      document.getElementById('heartRate').value = data.heartRate || '';
-      document.getElementById('temperature').value = data.temperature || '';
-      document.getElementById('ecg').value = data.ecg || '';
-      document.getElementById('sugar').value = data.sugar || '';
-      document.getElementById('bp').value = data.bp || '';
-    });
-}
+// Fetch latest sensor data and fill the form
+fetch('/sensor-data')
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById('heartRate').value = data.heartRate || '';
+    document.getElementById('temperature').value = data.temperature || '';
+    document.getElementById('ecg').value = data.ecg || '';
+    document.getElementById('sugar').value = data.sugar || '';
+    document.getElementById('bp').value = data.bp || '';
+  });
 
-// Submit patient data to backend
+// Handle form submit
 document.getElementById('patientForm').addEventListener('submit', function (e) {
   e.preventDefault();
 
@@ -28,17 +26,9 @@ document.getElementById('patientForm').addEventListener('submit', function (e) {
   }).then(res => {
     if (res.ok) {
       alert('Patient data saved to Excel!');
+      document.getElementById('patientForm').reset();
     } else {
       alert('Error saving data.');
     }
   });
 });
-
-// For "Next Patient" button
-function nextPatient() {
-  document.getElementById('patientForm').reset();  // clear text fields
-  loadSensorData();  // fetch new sensor values
-}
-
-// Auto-load on page load
-window.onload = loadSensorData;
